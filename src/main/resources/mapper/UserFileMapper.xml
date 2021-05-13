@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fms.mapper.UserFileMapper">
+
+    <!--根据用户id查询文件列表-->
+    <select id="findByUserId" parameterType="Integer" resultType="UserFile">
+        select *
+        from files
+        where userId=#{userId};
+    </select>
+
+    <!--添加文件信息-->
+    <insert id="upload" parameterType="UserFile" useGeneratedKeys="true" keyProperty="id">
+        insert into files
+        values(#{id},#{oldFileName},#{newFileName},#{ext},#{path},#{size},#{type},#{isImg},#{downCounts},#{uploadTime},#{userId});
+    </insert>
+
+    <!--根据文件id获取文件信息-->
+    <select id="findById" parameterType="Integer" resultType="UserFile">
+        select *
+        from files
+        where id=#{id};
+    </select>
+
+    <!--更新下载次数-->
+    <insert id="update" parameterType="UserFile">
+        update files
+        set downCounts=#{downCounts}
+        where id=#{id};
+    </insert>
+
+    <!--删除文件信息-->
+    <delete id="delete" parameterType="Integer">
+        delete from files
+        where id=#{id};
+    </delete>
+
+</mapper>
