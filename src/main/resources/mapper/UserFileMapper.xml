@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.fms.mapper.UserFileMapper">
+<mapper namespace="com.frms.mapper.UserFileMapper">
 
     <!--根据用户id查询文件列表-->
     <select id="findByUserId" parameterType="Integer" resultType="UserFile">
         select *
         from files
-        where userId=#{userId};
+        where userId=#{id};
     </select>
 
     <!--添加文件信息-->
     <insert id="upload" parameterType="UserFile" useGeneratedKeys="true" keyProperty="id">
         insert into files
-        values(#{id},#{oldFileName},#{newFileName},#{ext},#{path},#{size},#{type},#{isImg},#{downCounts},#{uploadTime},#{userId});
+        values(#{id},#{uuid},#{oldFileName},#{newFileName},#{ext},#{path},#{size},#{type},#{isImg},#{downCounts},#{uploadTime},#{userId});
     </insert>
 
     <!--根据文件id获取文件信息-->

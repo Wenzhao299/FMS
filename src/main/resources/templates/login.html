@@ -1,19 +1,87 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>FRMS Login</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon.png">
+    <link href="./css/style.css" rel="stylesheet">
     <title>登录</title>
 
 </head>
-<body align="center">
+<body class="h-100">
+<div class="authincation h-100">
+    <div class="container h-100">
+        <div class="row justify-content-center h-100 align-items-center">
+            <div class="col-md-6">
+                <div class="authincation-content">
+                    <div class="row no-gutters">
+                        <div class="col-xl-12">
+                            <div class="auth-form">
+                                <h4 class="text-center mb-4">登录</h4>
+                                <form th:action="@{/user/login}" method="post">
+                                    <div class="form-group">
+                                        <label class="mb-1"><strong>账号</strong></label>
+                                        <input type="text" class="form-control" name="username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="mb-1"><strong>密码</strong></label>
+                                        <input type="password" class="form-control" id="pwd">
+                                        <input type="hidden" name="pwdHash" id="pwdHash">
+                                        <input type="hidden" name="mac" id="mac">
+                                    </div>
+                                    <div class="form-row d-flex justify-content-between mt-4 mb-2">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox ml-1">
+                                                <input type="checkbox" class="custom-control-input" id="basic_checkbox_1">
+                                                <label class="custom-control-label" for="basic_checkbox_1">记住密码</label>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="form-group">
+                                            <a href="page-forgot-password.html">Forgot Password?</a>
+                                        </div> -->
+                                    </div>
+                                    <div class="text-center">
+                                        <input type="submit" class="btn btn-primary btn-block" value="登录" onclick="sha()"></input>
+                                    </div>
+                                </form>
+                                <div class="new-account mt-3">
+                                    <p>没有账号？ <a class="text-primary" th:href="@{/toRegister}">注册</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<h2>登录</h2>
+<script src="./crypto-js-4.0.0/crypto-js.js"></script>
+<script>
+    // 获取mac信息
+    var locator = new ActiveXObject ("WbemScripting.SWbemLocator");
+    var service = locator.ConnectServer(".");
+    document.getElementById("mac").value = macinfo();
 
-<form th:action="@{/user/login}" method="post">
-    用户名<br><input type="text" name="username"><br><br>
-    密码<br><input type="text" name="password"><br><br>
-    <input type="submit" value="登录">
-</form>
+    // 加密
+    function sha(){
+        document.getElementById("pwdHash").value = CryptoJS.SHA256(document.getElementById("pwd").value);
+    }
 
+    function macinfo(){
+        var properties = service.ExecQuery("SELECT * FROM Win32_NetworkAdapterConfiguration Where IPEnabled=TRUE");
+        var e = new Enumerator (properties);
+        var info = "--";
+        var i = 1;
+        for (;!e.atEnd();e.moveNext ()){
+            var p = e.item ();
+            info += p.MACAddress + "--";
+            i++;
+        }
+        return info;
+    }
+</script>
 </body>
 </html>

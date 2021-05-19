@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.fms.mapper.UserMapper">
+<mapper namespace="com.frms.mapper.UserMapper">
 
-    <!--登录-->
     <select id="login" parameterType="User" resultType="User">
         select *
         from user
-        where username=#{username} and password=#{password};
+        where username=#{username} and pwdHash=#{pwdHash};
     </select>
 
+    <insert id="register" parameterType="User">
+        insert into user
+        values(#{id},#{username},#{pwdHash},#{salt},#{counter});
+    </insert>
+
+    <select id="findByUsername" parameterType="User" resultType="User">
+        select *
+        from user
+        where username=#{username};
+    </select>
+
+    <update id="updateCounter">
+        update user
+        set counter=#{counter}
+        where username=#{username}
+    </update>
 </mapper>
